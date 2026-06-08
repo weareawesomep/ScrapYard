@@ -5,36 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Used Spare Parts | ScrapCar.ae</title>
     
+    <!-- FIX: Separated font links -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Geist', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', system-ui, -apple-system, sans-serif; }
         body { background-color: #F8FAFC; color: #1E293B; overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; }
 
         header { display: flex; justify-content: space-between; align-items: center; padding: 16px 40px; background: #FFFFFF; border-bottom: 1px solid #E2E8F0; }
         .header-left { display: flex; align-items: center; gap: 16px; }
-        .back-btn { background: #F1F5F9; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; color: #475569; text-decoration: none; transition: background 0.2s; }
+        .back-btn { background: #F1F5F9; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; color: #475569; text-decoration: none; transition: background 0.2s; }
         .back-btn:hover { background: #E2E8F0; }
-        .logo { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: #0F172A; text-decoration: none; letter-spacing: 1px; }
-        .search-bar { padding: 10px 16px; border: 1px solid #E2E8F0; border-radius: 8px; width: 350px; background: #F8FAFC; outline: none; transition: border-color 0.2s; }
+        
+        /* FIX: Forced the logo font */
+        .logo { font-family: 'Bebas Neue', Impact, sans-serif !important; font-size: 28px; color: #0F172A; text-decoration: none; letter-spacing: 1px; }
+        
+        .search-bar { padding: 10px 16px; border: 1px solid #E2E8F0; border-radius: 8px; width: 350px; background: #F8FAFC; outline: none; transition: border-color 0.2s; font-size: 14px; }
         .search-bar:focus { border-color: #7366FF; }
 
         .layout { display: flex; gap: 30px; padding: 30px 40px; max-width: 1600px; margin: 0 auto; width: 100%; flex-grow: 1; }
 
         .sidebar { width: 240px; flex-shrink: 0; }
-        .filter-group { margin-bottom: 24px; }
-        .filter-title { font-size: 11px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
-        .filter-label { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #475569; margin-bottom: 10px; cursor: pointer; }
+        .filter-group { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #E2E8F0; }
+        .filter-title { font-size: 12px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+        
+        .filter-scroll-area { max-height: 220px; overflow-y: auto; padding-right: 8px; }
+        .filter-scroll-area::-webkit-scrollbar { width: 4px; }
+        .filter-scroll-area::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+        
+        .filter-label { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #475569; margin-bottom: 12px; cursor: pointer; font-weight: 500; }
         .filter-label input { width: 16px; height: 16px; border-radius: 4px; border: 1px solid #CBD5E1; cursor: pointer; }
-        .clear-btn { width: 100%; padding: 10px; background: transparent; border: 1px solid #E2E8F0; border-radius: 8px; font-weight: 600; color: #64748B; cursor: pointer; transition: background 0.2s; }
+        
+        .clear-btn { width: 100%; padding: 12px; background: transparent; border: 1px solid #E2E8F0; border-radius: 8px; font-weight: 700; color: #64748B; cursor: pointer; transition: background 0.2s; }
         .clear-btn:hover { background: #F1F5F9; }
 
         .grid-container { flex-grow: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; align-items: start; align-content: start; }
         
         .card { background: #FFFFFF; border-radius: 12px; overflow: hidden; border: 1px solid #E2E8F0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; transition: transform 0.2s; }
-        .card:hover { transform: translateY(-4px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 8px 15px rgba(0,0,0,0.08); border-color: #CBD5E1; }
         .card-img { width: 100%; height: 160px; object-fit: cover; background-color: #EEF2FF; position: relative; border-bottom: 1px solid #F1F5F9; }
         .card-img.fallback { background: #E0E7FF url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="%23818CF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>') no-repeat center; }
 
@@ -42,24 +53,23 @@
         .card-title { font-size: 16px; font-weight: 700; color: #0F172A; margin-bottom: 12px; line-height: 1.4; }
         
         .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
-        .tag { padding: 4px 10px; background: #F1F5F9; color: #475569; border-radius: 6px; font-size: 12px; font-weight: 600; }
+        .tag { padding: 4px 10px; background: #F1F5F9; color: #475569; border-radius: 6px; font-size: 12px; font-weight: 700; }
         .tag.condition { background: #FFF7ED; color: #EA580C; }
 
-        .meta-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748B; margin-bottom: 8px; }
+        .meta-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748B; margin-bottom: 8px; font-weight: 500; }
         .meta-row svg { width: 14px; height: 14px; fill: currentColor; }
-        .meta-row.map-link { color: #2563EB; font-weight: 600; margin-bottom: 16px; }
+        .meta-row.map-link { color: #2563EB; font-weight: 700; margin-bottom: 16px; }
         .meta-row.map-link a { color: inherit; text-decoration: none; }
         .meta-row.map-link a:hover { text-decoration: underline; }
 
         .btn-group { display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
-        .wa-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: #25D366; color: #FFFFFF; padding: 10px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; transition: background 0.2s; }
+        .wa-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: #25D366; color: #FFFFFF; padding: 12px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 700; transition: background 0.2s; }
         .wa-btn:hover { background: #1EBE5C; }
-        .wa-subtext { font-size: 10px; font-weight: 400; opacity: 0.9; display: block; margin-top: 2px; }
+        .wa-subtext { font-size: 10px; font-weight: 500; opacity: 0.9; display: block; margin-top: 2px; }
         
         .loader { grid-column: 1 / -1; text-align: center; padding: 40px; color: #64748B; font-weight: 500; }
 
-        /* Footer */
-        footer { background-color: #111827; color: #FFFFFF; padding: 40px 5%; margin-top: auto; }
+        footer { background-color: #111827; color: #FFFFFF; padding: 40px 5%; margin-top: auto; position: relative; z-index: 10; }
         .footer-content { max-width: 1600px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; }
         .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
         .footer-links a { color: #9CA3AF; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
@@ -69,6 +79,8 @@
         @media (max-width: 768px) {
             .layout { flex-direction: column; padding: 20px; }
             .sidebar { width: 100%; display: flex; overflow-x: auto; gap: 20px; border-bottom: 1px solid #E2E8F0; padding-bottom: 20px; }
+            .filter-group { border-bottom: none; border-right: 1px solid #E2E8F0; padding-right: 20px; min-width: 150px; }
+            .filter-scroll-area { max-height: 150px; }
         }
     </style>
 </head>
@@ -85,13 +97,20 @@
     <div class="layout">
         <aside class="sidebar">
             <div class="filter-group">
+                <div class="filter-title">Car Brand</div>
+                <div id="dynamic-brand-filters" class="filter-scroll-area">
+                    <div style="font-size: 13px; color: #94A3B8;">Loading brands...</div>
+                </div>
+            </div>
+            <div class="filter-group">
                 <div class="filter-title">Condition</div>
-                <label class="filter-label"><input type="checkbox" class="filter-cb" value="Used" checked> Used</label>
+                <label class="filter-label"><input type="checkbox" class="filter-cb condition-cb" value="used"> Used</label>
+                <label class="filter-label"><input type="checkbox" class="filter-cb condition-cb" value="new"> New</label>
             </div>
             <div class="filter-group">
                 <div class="filter-title">Location</div>
-                <label class="filter-label"><input type="checkbox" class="filter-cb" value="Al Sajaa"> Al Sajaa</label>
-                <label class="filter-label"><input type="checkbox" class="filter-cb" value="Industrial Area"> Industrial Area</label>
+                <label class="filter-label"><input type="checkbox" class="filter-cb location-cb" value="al sajaa"> Al Sajaa</label>
+                <label class="filter-label"><input type="checkbox" class="filter-cb location-cb" value="industrial area"> Industrial Area</label>
             </div>
             <button class="clear-btn" id="clearFilters">Clear All Filters</button>
         </aside>
@@ -103,13 +122,14 @@
 
     <footer>
         <div class="footer-content">
-            <div class="logo" style="font-size: 24px;">SCRAPCAR.AE</div>
+            <div class="logo" style="font-size: 24px; color: white;">SCRAPCAR.AE</div>
+            <!-- FIX: Active footer links -->
             <div class="footer-links">
-                <a href="#">About Us</a>
-                <a href="#">Contact Us</a>
-                <a href="#">Safety Center</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Privacy Policy</a>
+                <a href="about.html">About Us</a>
+                <a href="contact.html">Contact Us</a>
+                <a href="safety.html">Safety Center</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="privacy.html">Privacy Policy</a>
             </div>
             <div class="footer-copyright">&copy; 2026 ScrapCar.ae. All rights reserved.</div>
         </div>
@@ -118,7 +138,7 @@
     <script>
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQOZ5sGD1yMuSaFWNpHHAdRUdndQyeTOD6-xBuKq-A3wmEim82bPT5mcCfcyJPnLMz0PWgbO_VX1P-S/pub?output=csv';
         const container = document.getElementById('listings-container');
-        let allListings = []; // Global store for loaded data
+        let allListings = []; 
 
         function parseCSV(text) {
             let p = '', row = [''], ret = [row], i = 0, r = 0, s = !0, l;
@@ -131,24 +151,46 @@
             return ret;
         }
 
-        // Fetch Data from Google Sheets
         fetch(csvUrl)
             .then(response => response.text())
             .then(data => {
                 const rows = parseCSV(data);
-                // Save valid rows globally
                 allListings = rows.slice(1).filter(r => r.length > 3 && r[0].trim() !== "");
-                applyFilters(); // Render initially
+                
+                let allBrands = new Set();
+                allListings.forEach(row => {
+                    const brandsRaw = row[1] ? row[1].trim() : '';
+                    let brandsList = brandsRaw.replace(/"/g, '').split(',').map(b => b.trim()).filter(b => b);
+                    brandsList.forEach(b => allBrands.add(b)); 
+                });
+
+                const brandContainer = document.getElementById('dynamic-brand-filters');
+                brandContainer.innerHTML = ''; 
+                
+                Array.from(allBrands).sort().forEach(brand => {
+                    const label = document.createElement('label');
+                    label.className = 'filter-label';
+                    label.innerHTML = `<input type="checkbox" class="filter-cb brand-cb" value="${brand.toLowerCase()}"> ${brand}`;
+                    brandContainer.appendChild(label);
+                });
+
+                document.querySelectorAll('.filter-cb').forEach(cb => {
+                    cb.addEventListener('change', applyFilters);
+                });
+
+                applyFilters(); 
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
                 container.innerHTML = '<div class="loader" style="color: #F00B51;">Error loading listings. Please check your Google Sheet link.</div>';
             });
 
-        // Search & Filter Logic
         function applyFilters() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const checkedBoxes = Array.from(document.querySelectorAll('.filter-cb:checked')).map(cb => cb.value.toLowerCase());
+            
+            const checkedBrands = Array.from(document.querySelectorAll('.brand-cb:checked')).map(cb => cb.value.toLowerCase());
+            const checkedConditions = Array.from(document.querySelectorAll('.condition-cb:checked')).map(cb => cb.value.toLowerCase());
+            const checkedLocations = Array.from(document.querySelectorAll('.location-cb:checked')).map(cb => cb.value.toLowerCase());
 
             const filteredData = allListings.filter(row => {
                 const shopName = (row[0] || '').toLowerCase();
@@ -156,32 +198,22 @@
                 const condition = (row[2] || '').toLowerCase();
                 const location = (row[3] || '').toLowerCase();
 
-                // Check Text Search
                 const matchesSearch = shopName.includes(searchTerm) || brandsRaw.includes(searchTerm);
+                const matchesBrand = checkedBrands.length === 0 || checkedBrands.some(b => brandsRaw.includes(b));
+                const matchesCondition = checkedConditions.length === 0 || checkedConditions.some(c => condition.includes(c));
+                const matchesLocation = checkedLocations.length === 0 || checkedLocations.some(l => location.includes(l));
 
-                // Check Sidebar Checkboxes
-                let matchesCheckboxes = true;
-                if (checkedBoxes.length > 0) {
-                    matchesCheckboxes = false;
-                    checkedBoxes.forEach(val => {
-                        if (condition.includes(val) || location.includes(val)) {
-                            matchesCheckboxes = true; // Match found in this row
-                        }
-                    });
-                }
-
-                return matchesSearch && matchesCheckboxes;
+                return matchesSearch && matchesBrand && matchesCondition && matchesLocation;
             });
 
             renderListings(filteredData);
         }
 
-        // Render UI Cards
         function renderListings(dataToRender) {
             container.innerHTML = ''; 
             
             if (dataToRender.length === 0) {
-                container.innerHTML = '<div class="loader">No shops match your search criteria.</div>';
+                container.innerHTML = '<div class="loader">No shops match your exact criteria.</div>';
                 return;
             }
 
@@ -234,11 +266,8 @@
             });
         }
 
-        // Attach Event Listeners to Search and Checkboxes
         document.getElementById('searchInput').addEventListener('input', applyFilters);
-        document.querySelectorAll('.filter-cb').forEach(cb => cb.addEventListener('change', applyFilters));
         
-        // Clear Filters Button Logic
         document.getElementById('clearFilters').addEventListener('click', () => {
             document.getElementById('searchInput').value = '';
             document.querySelectorAll('.filter-cb').forEach(cb => cb.checked = false);
