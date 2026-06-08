@@ -5,234 +5,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ScrapCar.ae | UAE Automotive Directory</title>
     
-    <!-- Google Fonts: Importing Geist (Body) and Bebas Neue (Logo) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Geist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <style>
-        /* Modern Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Geist', sans-serif; 
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', system-ui, -apple-system, sans-serif; }
+        body { background-color: #FAFAFA; color: #212121; overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; }
 
-        body {
-            background-color: #FAFAFA;
-            color: #212121;
-            overflow-x: hidden;
-        }
+        .hero-wrapper { background: linear-gradient(135deg, #F00B51 0%, #7366FF 100%); padding-bottom: 80px; }
 
-        /* --- GRADIENT HERO WRAPPER --- */
-        .hero-wrapper {
-            background: linear-gradient(135deg, #F00B51 0%, #7366FF 100%);
-            padding-bottom: 80px; 
-        }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; width: 100%; }
 
-        /* Top Navigation Bar */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 5%;
-            width: 100%;
-        }
+        .logo { font-family: 'Bebas Neue', sans-serif; font-size: 38px; font-weight: 400; color: #FFFFFF; letter-spacing: 1.5px; text-transform: uppercase; text-decoration: none; }
 
-        /* Uniform Logo Styling */
-        .logo {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 38px;
-            font-weight: 400; 
-            color: #FFFFFF; 
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            text-decoration: none;
-        }
-
-        /* Status Badge */
         .status-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background-color: rgba(255, 255, 255, 0.2); 
-            padding: 6px 16px;
-            border-radius: 16px; 
-            font-size: 13px;
-            font-weight: 500;
-            color: #FFFFFF;
-            backdrop-filter: blur(4px); 
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex; align-items: center; gap: 8px; background-color: rgba(255, 255, 255, 0.2); 
+            padding: 6px 16px; border-radius: 16px; font-size: 13px; font-weight: 500; color: #FFFFFF;
+            backdrop-filter: blur(4px); border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #4DEB85; 
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
+        .status-dot { width: 8px; height: 8px; background-color: #4DEB85; border-radius: 50%; animation: pulse 2s infinite; }
 
-        /* Hero Container */
-        .hero {
-            max-width: 850px;
-            margin: 40px auto 0 auto;
-            text-align: center;
-            padding: 0 20px;
-            animation: fadeInUp 0.8s ease-out forwards;
-        }
-
-        .hero h1 {
-            font-size: 48px;
-            font-weight: 800; 
-            line-height: 1.2;
-            color: #FFFFFF; 
-            margin-bottom: 16px;
-            letter-spacing: -0.5px;
-        }
-
-        .hero h1 span {
-            color: rgba(255, 255, 255, 0.9); 
-        }
-
-        .hero p {
-            font-size: 18px;
-            color: rgba(255, 255, 255, 0.9); 
-            max-width: 700px;
-            margin: 0 auto 40px auto;
-            line-height: 1.6;
-            font-weight: 400;
-        }
+        .hero { max-width: 850px; margin: 40px auto 0 auto; text-align: center; padding: 0 20px; animation: fadeInUp 0.8s ease-out forwards; }
+        .hero h1 { font-size: 48px; font-weight: 900; line-height: 1.2; color: #FFFFFF; margin-bottom: 16px; letter-spacing: -0.5px; }
+        .hero h1 span { color: rgba(255, 255, 255, 0.9); }
+        .hero p { font-size: 18px; color: rgba(255, 255, 255, 0.9); max-width: 700px; margin: 0 auto 40px auto; line-height: 1.6; font-weight: 400; }
 
         /* Search Bar */
         .search-container {
-            max-width: 700px;
-            margin: 0 auto;
-            position: relative;
-            display: flex;
-            align-items: center;
-            background-color: #FFFFFF;
-            border-radius: 32px; 
-            padding: 8px;
+            max-width: 700px; margin: 0 auto; position: relative; display: flex; align-items: center;
+            background-color: #FFFFFF; border-radius: 32px; padding: 8px;
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2), 0 8px 10px -6px rgba(0,0,0,0.1);
             transition: box-shadow 0.3s ease, transform 0.3s ease;
         }
-
-        .search-container:focus-within {
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.25), 0 10px 10px -5px rgba(0,0,0,0.15);
-            transform: translateY(-2px);
-        }
-
-        .search-bar {
-            width: 100%;
-            padding: 16px 24px;
-            font-size: 16px;
-            border: none;
-            background: transparent;
-            outline: none;
-            color: #212121;
-        }
-
+        .search-container:focus-within { box-shadow: 0 20px 25px -5px rgba(0,0,0,0.25), 0 10px 10px -5px rgba(0,0,0,0.15); transform: translateY(-2px); }
+        .search-bar { width: 100%; padding: 16px 24px; font-size: 16px; border: none; background: transparent; outline: none; color: #212121; }
+        
         .search-btn {
-            background-color: #7366FF; 
-            color: white;
-            border: none;
-            border-radius: 24px;
-            padding: 14px 28px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
+            background-color: #0F172A; color: white; border: none; border-radius: 24px; padding: 14px 28px;
+            font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
         .search-btn:hover {
-            background-color: #5C52CC; 
+            background-color: #F00B51; transform: scale(1.05); box-shadow: 0 4px 15px rgba(240, 11, 81, 0.4);
         }
 
         /* Grid System */
         .grid-container {
-            max-width: 1100px;
-            margin: 60px auto 80px auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease-out 0.2s forwards;
+            max-width: 1100px; margin: 60px auto 80px auto; padding: 0 20px; display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;
+            opacity: 0; animation: fadeInUp 0.8s ease-out 0.2s forwards; flex-grow: 1;
         }
 
         /* Cards */
         .card {
-            background: #FFFFFF;
-            border-radius: 12px;
-            padding: 32px 24px;
-            text-align: left;
-            text-decoration: none;
-            color: inherit;
+            background: #FFFFFF; border-radius: 12px; padding: 32px 24px; text-align: left;
+            text-decoration: none; color: inherit; border: 1px solid #E0E0E0;
             box-shadow: 0 2px 1px -1px rgba(0,0,0,0.05), 0 1px 1px 0 rgba(0,0,0,0.05), 0 1px 3px 0 rgba(0,0,0,0.05);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            border: 1px solid #E0E0E0; 
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            display: flex; flex-direction: column; justify-content: space-between;
         }
-
         .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-            border-color: #BDBDBD;
+            transform: translateY(-6px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            border-color: #CBD5E1;
         }
+        .icon-box { font-size: 32px; margin-bottom: 20px; display: inline-block; }
+        .card h3 { font-size: 20px; font-weight: 700; color: #212121; margin-bottom: 12px; }
+        .card p { font-size: 15px; color: #757575; line-height: 1.6; margin-bottom: 24px; }
 
-        .icon-box {
-            font-size: 32px;
-            margin-bottom: 20px;
-            display: inline-block;
-        }
-
-        .card h3 {
-            font-size: 20px;
-            font-weight: 600;
-            color: #212121;
-            margin-bottom: 12px;
-        }
-
-        .card p {
-            font-size: 15px;
-            color: #757575;
-            line-height: 1.6;
-            margin-bottom: 24px;
-        }
-
+        /* Card Buttons */
         .card-btn {
-            display: inline-flex;
-            align-items: center;
-            font-size: 14px;
-            font-weight: 600;
-            color: #7366FF; 
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: padding-left 0.2s ease;
+            display: inline-flex; justify-content: center; align-items: center;
+            background-color: #F1F5F9; color: #475569; padding: 12px 20px;
+            border-radius: 8px; font-size: 14px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.5px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        
+        .card:hover .card-btn { background-color: #7366FF; color: #FFFFFF; }
+        .card-btn:hover { transform: scale(1.05) translateY(-2px) !important; box-shadow: 0 6px 15px rgba(115, 102, 255, 0.4); background-color: #5C52CC !important; }
 
-        .card:hover .card-btn {
-            padding-left: 8px;
-        }
+        /* Footer */
+        footer { background-color: #111827; color: #FFFFFF; padding: 40px 5%; margin-top: auto; }
+        .footer-content { max-width: 1100px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; }
+        .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+        .footer-links a { color: #9CA3AF; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+        .footer-links a:hover { color: #FFFFFF; }
+        .footer-copyright { color: #6B7280; font-size: 14px; margin-top: 20px; text-align: center; width: 100%; border-top: 1px solid #374151; padding-top: 20px; }
 
-        /* Animations */
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.5; }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.5; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         @media (max-width: 600px) {
-            .hero h1 { font-size: 36px; }
-            header { padding: 16px 20px; }
+            .hero h1 { font-size: 36px; } header { padding: 16px 20px; }
             .grid-container { grid-template-columns: 1fr; margin-top: 40px; }
             .search-container { flex-direction: column; border-radius: 16px; padding: 12px; }
             .search-bar { padding: 12px; text-align: center; }
@@ -244,14 +109,8 @@
 
     <div class="hero-wrapper">
         <header>
-            <a href="#" class="logo">
-                SCRAPCAR.AE
-            </a>
-            
-            <div class="status-badge">
-                <span class="status-dot"></span>
-                Live — UAE
-            </div>
+            <a href="#" class="logo">SCRAPCAR.AE</a>
+            <div class="status-badge"><span class="status-dot"></span>Live — UAE</div>
         </header>
 
         <section class="hero">
@@ -266,8 +125,6 @@
     </div>
 
     <main class="grid-container">
-        
-        <!-- Updated link: Change 'used-parts.html' to the exact name of your Google Sheets HTML file -->
         <a href="used-parts.html" class="card">
             <div>
                 <span class="icon-box">📦</span>
@@ -276,7 +133,6 @@
             </div>
             <span class="card-btn">Explore Used Parts &rarr;</span>
         </a>
-
         <a href="#" class="card">
             <div>
                 <span class="icon-box">💎</span>
@@ -285,7 +141,6 @@
             </div>
             <span class="card-btn">Explore New Parts &rarr;</span>
         </a>
-
         <a href="#" class="card">
             <div>
                 <span class="icon-box">🛠️</span>
@@ -294,7 +149,6 @@
             </div>
             <span class="card-btn">Find a Garage &rarr;</span>
         </a>
-
         <a href="#" class="card">
             <div>
                 <span class="icon-box">🎨</span>
@@ -303,7 +157,6 @@
             </div>
             <span class="card-btn">Find Paint Shops &rarr;</span>
         </a>
-
         <a href="#" class="card">
             <div>
                 <span class="icon-box">🛞</span>
@@ -312,7 +165,6 @@
             </div>
             <span class="card-btn">Browse Tire Shops &rarr;</span>
         </a>
-
         <a href="#" class="card">
             <div>
                 <span class="icon-box">🪝</span>
@@ -321,8 +173,23 @@
             </div>
             <span class="card-btn">Get Recovery Help &rarr;</span>
         </a>
-
     </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="logo" style="font-size: 24px;">SCRAPCAR.AE</div>
+            <div class="footer-links">
+                <a href="#">About Us</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Safety Center</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <div class="footer-copyright">
+                &copy; 2026 ScrapCar.ae. All rights reserved.
+            </div>
+        </div>
+    </footer>
 
 </body>
 </html>
