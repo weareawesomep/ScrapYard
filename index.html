@@ -122,6 +122,22 @@
         @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.25)} }
         @keyframes fadeInUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
         @media (max-width: 640px) { .hero h1 { letter-spacing: -1px; } .grid-container { grid-template-columns: 1fr; margin-top: 24px; } .search-wrap { flex-direction: column; border-radius: 12px; } .search-btn { width: 100%; border-radius: 8px; padding: 14px; } header { padding: 16px 5%; } }
+/* --- ADVANCED DIRECTORY UPDATES --- */
+        /* 1. Fix Tooltip Overlap */
+        .card { overflow: visible !important; }
+        .card-media { border-radius: 14px 14px 0 0; overflow: hidden; }
+        .tag-more .tooltip { white-space: normal !important; min-width: 180px; text-align: center; z-index: 99999; left: 50%; transform: translateX(-50%); }
+
+        /* 2. Sidebar Search Bar */
+        .sidebar-search { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 8px 10px; border-radius: 6px; font-size: 12px; margin-bottom: 10px; outline: none; font-family: 'Inter', sans-serif; }
+        .sidebar-search:focus { border-color: #F00B51; }
+
+        /* 3. Pagination Controls */
+        .pagination { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 40px; grid-column: 1 / -1; }
+        .page-btn { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; transition: 0.2s; }
+        .page-btn:hover:not(:disabled) { background: rgba(255,255,255,0.15); }
+        .page-btn.active { background: #F00B51; border-color: #F00B51; }
+        .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
     </style>
 </head>
 <body>
