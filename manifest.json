@@ -1,0 +1,16 @@
+{
+  "name": "Pro1Stop",
+  "short_name": "Pro1Stop",
+  "description": "UAE's Premier Automotive Directory",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0a0f1e",
+  "theme_color": "#F00B51",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3204/3204996.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
