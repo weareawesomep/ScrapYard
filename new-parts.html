@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Spare Parts | ScrapCar.ae</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+       *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: #0a0f1e; color: #f1f5f9; min-height: 100vh; display: flex; flex-direction: column; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+        /* ── HEADER ── */
+        header {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(10,15,30,0.92); backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            padding: 0 32px; height: 64px;
+            display: flex; align-items: center; gap: 16px;
+        }
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 14px; border-radius: 8px;
+            background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.7); font-size: 13px; font-weight: 600;
+            text-decoration: none; cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+            white-space: nowrap; flex-shrink: 0;
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+        .logo { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 2px; color: #fff; text-decoration: none; flex-shrink: 0; }
+        .logo span { color: #F00B51; }
+        .search-wrap {
+            flex: 1; max-width: 460px; margin-left: auto;
+            display: flex; align-items: center; gap: 0;
+            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 9px; padding: 0 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .search-wrap:focus-within { border-color: rgba(240,11,81,0.5); box-shadow: 0 0 0 3px rgba(240,11,81,0.1); }
+        .search-wrap svg { color: rgba(255,255,255,0.3); flex-shrink: 0; }
+        #searchInput {
+            flex: 1; background: none; border: none; outline: none;
+            font-family: 'Inter', sans-serif; font-size: 13.5px; color: #fff;
+            padding: 11px 10px;
+        }
+        #searchInput::placeholder { color: rgba(255,255,255,0.25); }
+
+        .mobile-filter-btn {
+            display: none; align-items: center; gap: 7px; padding: 9px 14px;
+            background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px; color: rgba(255,255,255,0.7); font-family: 'Inter',sans-serif;
+            font-size: 13px; font-weight: 600; cursor: pointer; flex-shrink: 0;
+        }
+        .mobile-filter-btn:hover { background: rgba(255,255,255,0.12); color:#fff; }
+
+        /* ── LAYOUT ── */
+        .layout { display: flex; flex: 1; max-width: 1600px; margin: 0 auto; width: 100%; }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            width: 248px; flex-shrink: 0;
+            background: rgba(255,255,255,0.025); border-right: 1px solid rgba(255,255,255,0.07);
+            padding: 28px 20px; position: sticky; top: 64px;
+            height: calc(100vh - 64px); overflow-y: auto;
+        }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+        .filter-section { margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .filter-section:last-of-type { border-bottom: none; }
+        .filter-title {
+            font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px;
+            color: rgba(255,255,255,0.35); margin-bottom: 14px;
+        }
+        .filter-scroll { max-height: 200px; overflow-y: auto; padding-right: 4px; }
+        .filter-scroll::-webkit-scrollbar { width: 3px; }
+        .filter-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+        .filter-label {
+            display: flex; align-items: center; gap: 10px; padding: 7px 10px;
+            border-radius: 7px; cursor: pointer; transition: background 0.12s;
+            font-size: 13.5px; font-weight: 500; color: rgba(255,255,255,0.6);
+            user-select: none; margin-bottom: 2px;
+        }
+        .filter-label:hover { background: rgba(255,255,255,0.06); color: #fff; }
+        .filter-label input[type="checkbox"] { width: 15px; height: 15px; accent-color: #F00B51; cursor: pointer; flex-shrink: 0; }
+        .filter-count {
+            margin-left: auto; font-size: 11px; font-weight: 700;
+            background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.35);
+            padding: 2px 7px; border-radius: 100px;
+        }
+        .clear-btn {
+            margin-top: 20px; width: 100%; padding: 10px 14px;
+            background: transparent; border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px; font-family: 'Inter',sans-serif;
+            font-size: 12.5px; font-weight: 700; color: rgba(255,255,255,0.4);
+            cursor: pointer; transition: all 0.15s;
+        }
+        .clear-btn:hover { border-color: rgba(255,255,255,0.3); color: #fff; background: rgba(255,255,255,0.05); }
+
+        /* ── LISTINGS AREA ── */
+        .listings-area { flex: 1; padding: 28px 28px 40px; }
+        .listings-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+        .results-count { display: flex; align-items: center; gap: 10px; }
+        .count-num { font-size: 26px; font-weight: 800; color: #fff; letter-spacing: -1px; }
+        .count-label { font-size: 14px; color: rgba(255,255,255,0.4); font-weight: 500; }
+        .count-dot { width: 8px; height: 8px; background: #4DEB85; border-radius: 50%; animation: pulse 2s infinite; }
+
+        /* active filter pills */
+        .active-pills { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 20px; min-height: 0; }
+        .pill {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 4px 10px 4px 12px;
+            background: rgba(240,11,81,0.15); border: 1px solid rgba(240,11,81,0.3);
+            border-radius: 100px; font-size: 12px; font-weight: 600; color: #ff4d7d;
+            cursor: pointer; transition: background 0.15s;
+        }
+        .pill:hover { background: rgba(240,11,81,0.25); }
+        .pill-x { font-size: 14px; line-height: 1; opacity: 0.7; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 20px; }
+
+        /* ── CARD ── */
+        .card {
+            background: #111827; border: 1px solid #1f2d45; border-radius: 14px;
+            overflow: hidden; display: flex; flex-direction: column;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            animation: fadeUp 0.3s ease both;
+        }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); border-color: rgba(240,11,81,0.25); }
+
+        /* image */
+        .card-media { height: 160px; border-radius: 0; overflow: hidden; border-bottom: 1px solid #1f2d45; flex-shrink: 0; position: relative; background: #0d1830; }
+        .card-media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.35s ease; }
+        .card:hover .card-media img { transform: scale(1.05); }
+
+        /* fallback map pin — shown when no image URL or image fails to load */
+        .card-media.no-image::after,
+        .card-media.show-fallback::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, #0d1830 0%, #131f38 100%);
+        }
+        .card-media.no-image::before,
+        .card-media.show-fallback::before {
+            content: 'SHARJAH, UAE';
+            position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+            font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.25);
+            letter-spacing: 1.5px; z-index: 2; white-space: nowrap;
+        }
+        .card-media .pin-icon {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -60%);
+            z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 4px;
+        }
+        .card-media .pin-head {
+            width: 36px; height: 36px; background: #F00B51;
+            border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 14px rgba(240,11,81,0.45);
+        }
+        .card-media .pin-head svg { transform: rotate(45deg); width: 16px; height: 16px; fill: white; }
+        .card-media .pin-tail { width: 2px; height: 8px; background: rgba(240,11,81,0.4); }
+        .card-media .pin-shadow { width: 14px; height: 4px; background: rgba(0,0,0,0.3); border-radius: 50%; filter: blur(2px); }
+
+        .card-body { padding: 16px 16px 8px; display: flex; flex-direction: column; flex-grow: 1; }
+        .card-title { font-size: 15px; font-weight: 800; color: #f1f5f9; margin-bottom: 12px; line-height: 1.3; }
+
+        /* tags */
+        .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+        .tag { padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+        .tag-brand { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.55); border: 1px solid rgba(255,255,255,0.09); }
+        .tag-used  { background: rgba(240,11,81,0.12); color: #ff6b8a; border: 1px solid rgba(240,11,81,0.2); }
+        .tag-new   { background: rgba(115,102,255,0.12); color: #a89fff; border: 1px solid rgba(115,102,255,0.2); }
+        .tag-both  { background: rgba(16,185,129,0.1); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.2); }
+
+        /* tooltip — rendered fixed so overflow:hidden on card doesn't clip it */
+        .tag-more { position: relative; cursor: pointer; background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.09); }
+        #floating-tooltip {
+            display: none; position: fixed; z-index: 9999;
+            background: #1e2d47; color: rgba(255,255,255,0.85);
+            font-size: 12px; font-weight: 500; padding: 8px 12px; border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1); white-space: nowrap;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5); pointer-events: none;
+            transform: translateX(-50%) translateY(-100%) translateY(-8px);
+        }
+
+        /* meta */
+        .meta-row { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: rgba(255,255,255,0.4); margin-bottom: 8px; font-weight: 500; }
+        .meta-row svg { width: 13px; height: 13px; fill: currentColor; flex-shrink: 0; }
+        .map-link { color: rgba(99,179,237,0.9); font-weight: 700; margin-bottom: 14px; cursor: pointer; }
+        .map-link a { color: inherit; text-decoration: none; }
+        .map-link a:hover { text-decoration: underline; }
+
+        /* whatsapp buttons */
+        .btn-group { display: flex; gap: 8px; margin-top: auto; padding: 12px 16px 14px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .wa-btn {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            background: #25D366; color: #fff; border-radius: 8px; text-decoration: none;
+            font-family: 'Inter',sans-serif; font-weight: 700;
+            transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+        }
+        .wa-btn:hover { background: #1cb955; transform: scale(1.02); box-shadow: 0 6px 18px rgba(37,211,102,0.35); }
+        .wa-btn.single { width: 100%; padding: 11px 14px; font-size: 14px; }
+        .wa-btn.half   { flex: 1; padding: 13px 8px; flex-direction: column; text-align: center; font-size: 13px; gap: 4px; }
+        .wa-btn.half svg { width: 20px; height: 20px; }
+        .wa-subtext { font-size: 10px; font-weight: 500; opacity: 0.8; display: block; }
+
+        /* loader / empty */
+        .state { grid-column: 1/-1; text-align: center; padding: 80px 20px; }
+        .spinner { width: 36px; height: 36px; border: 3px solid rgba(255,255,255,0.08); border-top-color: #F00B51; border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 20px; }
+        .state-icon { font-size: 44px; margin-bottom: 14px; }
+        .state-title { font-size: 20px; font-weight: 800; color: #f1f5f9; margin-bottom: 8px; }
+        .state-sub   { font-size: 14px; color: rgba(255,255,255,0.35); }
+
+        /* ── MOBILE DRAWER ── */
+        .drawer-overlay { display: none; position: fixed; inset: 0; z-index: 300; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); }
+        .drawer-panel   { position: absolute; top: 0; left: 0; width: 280px; height: 100%; background: #111827; padding: 24px 20px; overflow-y: auto; transform: translateX(-100%); transition: transform 0.28s ease; border-right: 1px solid rgba(255,255,255,0.08); }
+        .drawer-overlay.open { display: flex; }
+        .drawer-overlay.open .drawer-panel { transform: translateX(0); }
+        .drawer-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+        .drawer-top span { font-size: 16px; font-weight: 800; color: #f1f5f9; }
+        .drawer-close { width: 32px; height: 32px; background: rgba(255,255,255,0.07); border: none; border-radius: 8px; cursor: pointer; font-size: 18px; color: rgba(255,255,255,0.6); }
+
+        /* ── FOOTER ── */
+        footer { background: #060b18; border-top: 1px solid rgba(255,255,255,0.05); padding: 32px 5%; margin-top: auto; }
+        .footer-content { max-width: 1600px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; }
+        .footer-logo { font-family: 'Bebas Neue',sans-serif; font-size: 22px; letter-spacing: 2px; color: rgba(255,255,255,0.5); }
+        .footer-logo span { color: #F00B51; }
+        .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+        .footer-links a { color: rgba(255,255,255,0.3); text-decoration: none; font-size: 13px; font-weight: 500; transition: color 0.15s; }
+        .footer-links a:hover { color: #fff; }
+        .footer-copy { color: rgba(255,255,255,0.18); font-size: 12px; width: 100%; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 18px; margin-top: 10px; }
+
+        /* ── ANIMATIONS ── */
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.25)} }
+        @keyframes spin   { to { transform: rotate(360deg); } }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 960px) {
+            .layout { flex-direction: column; }
+            .sidebar { display: none; width: 100%; position: static; height: auto; }
+            .mobile-filter-btn { display: flex; }
+            .listings-area { padding: 20px; }
+        }
+        @media (max-width: 640px) {
+            header { padding: 0 16px; gap: 10px; }
+            .logo { display: none; }
+            .search-wrap { max-width: 100%; flex: 1; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="back-btn">← Back</a>
+    <a href="index.html" class="logo">SCRAP<span>CAR</span>.AE</a>
+    <div class="search-wrap">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="searchInput" placeholder="Search new parts, brands, or shops...">
+    </div>
+    <button class="mobile-filter-btn" id="openDrawer">Filters</button>
+</header>
+
+<div class="layout">
+    <aside class="sidebar" id="sidebar-desktop"></aside>
+    <section class="listings-area">
+        <div class="listings-header"><div class="results-count"><span class="count-dot"></span><span class="count-num" id="resultsNum">—</span><span class="count-label">Verified Providers</span></div></div>
+        <div class="active-pills" id="activePills"></div>
+        <div class="grid" id="listings-container"><div class="state"><div class="spinner"></div><div class="state-title">Fetching live listings…</div></div></div>
+    </section>
+</div>
+
+<div class="drawer-overlay" id="drawerOverlay">
+    <div class="drawer-panel"><div class="drawer-top"><span>Filters</span><button class="drawer-close" id="closeDrawer">✕</button></div><div id="sidebar-mobile"></div></div>
+</div>
+
+<script>
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQOZ5sGD1yMuSaFWNpHHAdRUdndQyeTOD6-xBuKq-A3wmEim82bPT5mcCfcyJPnLMz0PWgbO_VX1P-S/pub?gid=1947635296&single=true&output=csv';
+const WA_MSG = encodeURIComponent("Hi, I found your shop on ScrapCar.ae! I am looking for a new spare part...");
+
+let allListings = []; let activeFilters = { brand: [], model: [], condition: [], location: [] }; let dynamicBrands = [], dynamicModels = [], dynamicLocations = [];
+
+function parseCSV(text) { let p='', row=[''], ret=[row], i=0, r=0, s=true, l; for (l of text) { if ('"'===l) { if (s && l===p) row[i]+=l; s=!s; } else if (','===l && s) l=row[++i]=''; else if ('\n'===l && s) { if ('\r'===p) row[i]=row[i].slice(0,-1); row=ret[++r]=[l='']; i=0; } else row[i]+=l; p=l; } return ret; }
+
+fetch(CSV_URL + '&t=' + Date.now()).then(r => r.text()).then(data => {
+    const rows = parseCSV(data); allListings = rows.slice(1).filter(r => r.length > 3 && r[0] && r[0].trim());
+    const bSet = new Set(), mSet = new Set(), lSet = new Set();
+    allListings.forEach(row => {
+        (row[1]||'').replace(/"/g,'').split(',').map(b=>b.trim()).filter(Boolean).forEach(b=>bSet.add(b));
+        (row[2]||'').replace(/"/g,'').split(',').map(m=>m.trim()).filter(Boolean).forEach(m=>mSet.add(m));
+        if (row[4] && row[4].trim()) lSet.add(row[4].trim());
+    });
+    dynamicBrands = [...bSet].sort(); dynamicModels = [...mSet].sort(); dynamicLocations = [...lSet].sort();
+    buildSidebars(); applyFilters();
+}).catch(() => { document.getElementById('listings-container').innerHTML = '<div class="state"><div class="state-icon">⚠️</div><div class="state-title">Couldn\'t load listings</div></div>'; });
+
+function buildSidebarHTML() {
+    const condOpts = [{val:'used',label:'Used'},{val:'new',label:'New'},{val:'both',label:'Both'}];
+    const bHTML = dynamicBrands.map(b => `<label class="filter-label"><input type="checkbox" class="filter-cb" value="${b.toLowerCase()}" onchange="onCheck('brand','${b.toLowerCase()}',this.checked)">${b}</label>`).join('');
+    const mHTML = dynamicModels.map(m => `<label class="filter-label"><input type="checkbox" class="filter-cb" value="${m.toLowerCase()}" onchange="onCheck('model','${m.toLowerCase()}',this.checked)">${m}</label>`).join('');
+    const cHTML = condOpts.map(o => `<label class="filter-label"><input type="checkbox" class="filter-cb condition-cb" value="${o.val}" onchange="onCheck('condition','${o.val}',this.checked)">${o.label}</label>`).join('');
+    const lHTML = dynamicLocations.map(l => `<label class="filter-label"><input type="checkbox" class="filter-cb" value="${l.toLowerCase()}" onchange="onCheck('location','${l.toLowerCase()}',this.checked)">${l}</label>`).join('');
+    return `<div class="filter-section"><div class="filter-title">Car Brand</div><div class="filter-scroll">${bHTML}</div></div><div class="filter-section"><div class="filter-title">Car Model</div><div class="filter-scroll">${mHTML}</div></div><div class="filter-section"><div class="filter-title">Condition</div>${cHTML}</div><div class="filter-section"><div class="filter-title">Location</div><div class="filter-scroll">${lHTML}</div></div><button class="clear-btn" onclick="clearFilters()">Clear Filters</button>`;
+}
+function buildSidebars() { const html = buildSidebarHTML(); document.getElementById('sidebar-desktop').innerHTML = html; document.getElementById('sidebar-mobile').innerHTML = html; }
+function onCheck(k, v, c) { if (c) { if (!activeFilters[k].includes(v)) activeFilters[k].push(v); } else { activeFilters[k] = activeFilters[k].filter(x => x !== v); } buildSidebars(); applyFilters(); }
+function clearFilters() { activeFilters = { brand:[], model:[], condition:[], location:[] }; document.getElementById('searchInput').value = ''; buildSidebars(); applyFilters(); }
+function removePill(k, v) { activeFilters[k] = activeFilters[k].filter(x=>x!==v); buildSidebars(); applyFilters(); }
+
+function applyFilters() {
+    const q = document.getElementById('searchInput').value.toLowerCase().trim(); const { brand, model, condition, location } = activeFilters;
+    const filtered = allListings.filter(row => {
+        const name = (row[0]||'').toLowerCase(), brands = (row[1]||'').toLowerCase(), models = (row[2]||'').toLowerCase(), cond = (row[3]||'').toLowerCase(), loc = (row[4]||'').toLowerCase();
+        if (q && !name.includes(q) && !brands.includes(q) && !models.includes(q)) return false;
+        if (brand.length && !brand.some(b => brands.includes(b))) return false;
+        if (model.length && !model.some(m => models.includes(m))) return false;
+        if (condition.length && !condition.some(c => c === 'both' ? cond === 'both' : (cond.includes(c) || cond === 'both'))) return false;
+        if (location.length && !location.some(l => loc.includes(l))) return false; return true;
+    });
+    document.getElementById('resultsNum').textContent = filtered.length;
+    document.getElementById('activePills').innerHTML = Object.entries(activeFilters).flatMap(([k, vals]) => vals.map(v => `<span class="pill" onclick="removePill('${k}','${v}')">${v} ×</span>`)).join('');
+    renderListings(filtered);
+}
+function waIconSVG(size) { return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="white"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.665.592 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"/><path d="M12.004 2C6.479 2 2 6.479 2 12.004c0 1.908.534 3.718 1.465 5.274L2 22l4.878-1.441C8.312 21.51 10.112 22 12.004 22 17.525 22 22 17.521 22 12.004 22 6.479 17.525 2 12.004 2zm0 18c-1.703 0-3.3-.5-4.641-1.367l-.332-.198-3.448 1.02 1.023-3.365-.22-.353A9.942 9.942 0 0 1 2.992 12c0-4.96 4.04-9 9.012-9 4.968 0 9.008 4.04 9.008 9 0 4.96-4.04 9-9.008 9z"/></svg>`; }
+function condTagClass(c) { const l = c.toLowerCase(); return l==='new' ? 'tag-new' : l==='both' ? 'tag-both' : 'tag-used'; }
+
+function renderListings(data) {
+    const c = document.getElementById('listings-container');
+    if (!data.length) { c.innerHTML = '<div class="state"><div class="state-icon">🔍</div><div class="state-title">No shops found</div></div>'; return; }
+    c.innerHTML = data.map((row, idx) => {
+        const shopName=(row[0]||'').trim().replace(/[<>]/g,''), brandsRaw=(row[1]||'').trim(), modelsRaw=(row[2]||'').trim(), condition=(row[3]||'').trim().replace(/[<>"]/g,''), location=(row[4]||'').trim().replace(/[<>]/g,'');
+        const mapsLink=(row[5]||'').trim().replace(/[<>"]/g,''), wa1=(row[6]||'').trim().replace(/[^0-9\+]/g,''), wa2=(row[7]||'').trim().replace(/[^0-9\+]/g,''), rating=(row[10]||'').trim();
+        let imgUrl=(row[8]||'').trim(); const srcMatch = imgUrl.match(/src=["']([^"']+)["']/i); if(srcMatch) imgUrl=srcMatch[1]; imgUrl=imgUrl.replace(/[<>"]/g,'');
+
+        const brandsList = brandsRaw.replace(/"/g,'').split(',').map(b=>b.trim()).filter(Boolean);
+        let tagsHTML = '';
+        if (rating) tagsHTML += `<span class="tag" style="background: rgba(234,179,8,0.15); color: #facc15; border: 1px solid rgba(234,179,8,0.3);">⭐ ${rating}</span>`;
+        tagsHTML += brandsList.slice(0,3).map(b=>`<span class="tag tag-brand">${b}</span>`).join('');
+        if(brandsList.length>3) tagsHTML += `<span class="tag tag-more">+${brandsList.length-3} more<span class="tooltip">${brandsList.slice(3).join(', ')}</span></span>`;
+        if(condition) tagsHTML += `<span class="tag ${condTagClass(condition)}">${condition}</span>`;
+
+        const mediaHTML = imgUrl ? `<div class="card-media"><img src="${imgUrl}" alt="${shopName.replace(/"/g, '&quot;')}" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('show-fallback')"></div>` : `<div class="card-media no-image"></div>`;
+        const modelsRow = modelsRaw ? `<div class="meta-row"><svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>${modelsRaw.replace(/"/g,'').replace(/[<>]/g,'').split(',').join(', ')}</div>` : '';
+        const mapsRow = mapsLink ? `<div class="meta-row map-link"><svg viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg><a href="${mapsLink}" target="_blank">View on Maps →</a></div>` : '';
+
+        let waBtns = '';
+        if(wa1 && wa2) waBtns = `<a href="https://wa.me/${wa1}?text=${WA_MSG}" target="_blank" class="wa-btn half">${waIconSVG(20)}<div>Contact 1</div></a><a href="https://wa.me/${wa2}?text=${WA_MSG}" target="_blank" class="wa-btn half">${waIconSVG(20)}<div>Contact 2</div></a>`;
+        else if(wa1) waBtns = `<a href="https://wa.me/${wa1}?text=${WA_MSG}" target="_blank" class="wa-btn single">${waIconSVG(18)}<div>WhatsApp <span class="wa-subtext">Tap to message</span></div></a>`;
+
+        return `<div class="card" style="animation-delay:${idx*0.05}s">${mediaHTML}<div class="card-body"><div class="card-title">${shopName}</div><div class="tags">${tagsHTML}</div>${modelsRow}<div class="meta-row"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>${location}, UAE</div>${mapsRow}</div>${waBtns ? `<div class="btn-group">${waBtns}</div>` : ''}</div>`;
+    }).join('');
+}
+document.getElementById('searchInput').addEventListener('input', applyFilters);
+document.getElementById('openDrawer').addEventListener('click', () => { document.getElementById('drawerOverlay').classList.add('open'); document.body.style.overflow='hidden'; });
+document.getElementById('closeDrawer').addEventListener('click', () => { document.getElementById('drawerOverlay').classList.remove('open'); document.body.style.overflow=''; });
+</script>
+</body>
+</html>
