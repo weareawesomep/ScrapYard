@@ -251,22 +251,6 @@
             .search-wrap { max-width: 100%; flex: 1; }
             .grid { grid-template-columns: 1fr; }
         }
-/* --- ADVANCED DIRECTORY UPDATES --- */
-        /* 1. Fix Tooltip Overlap */
-        .card { overflow: visible !important; }
-        .card-media { border-radius: 14px 14px 0 0; overflow: hidden; }
-        .tag-more .tooltip { white-space: normal !important; min-width: 180px; text-align: center; z-index: 99999; left: 50%; transform: translateX(-50%); }
-
-        /* 2. Sidebar Search Bar */
-        .sidebar-search { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 8px 10px; border-radius: 6px; font-size: 12px; margin-bottom: 10px; outline: none; font-family: 'Inter', sans-serif; }
-        .sidebar-search:focus { border-color: #F00B51; }
-
-        /* 3. Pagination Controls */
-        .pagination { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 40px; grid-column: 1 / -1; }
-        .page-btn { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; transition: 0.2s; }
-        .page-btn:hover:not(:disabled) { background: rgba(255,255,255,0.15); }
-        .page-btn.active { background: #F00B51; border-color: #F00B51; }
-        .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -293,12 +277,21 @@
 <div class="drawer-overlay" id="drawerOverlay"><div class="drawer-panel"><div class="drawer-top"><span>Filters</span><button class="drawer-close" id="closeDrawer">✕</button></div><div id="sidebar-mobile"></div></div></div>
 
 <script>
-// CHANGE THIS CSV URL FOR THE SPECIFIC SERVICE PAGE!
-const CSV_URL = 'PASTE_URL_HERE';
-const WA_MSG = encodeURIComponent("Hi, I found your shop on ScrapCar.ae! Can I get some info?");
+// ── THEME INITIALIZATION ──
+const themeToggle = document.getElementById('themeToggle');
+const currentTheme = localStorage.getItem('theme') || (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+document.documentElement.setAttribute('data-theme', currentTheme);
+themeToggle.addEventListener('click', () => { let theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', theme); localStorage.setItem('theme', theme); });
+
+// CHANGE THIS LINK FOR EACH SERVICE PAGE!
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQOZ5sGD1yMuSaFWNpHHAdRUdndQyeTOD6-xBuKq-A3wmEim82bPT5mcCfcyJPnLMz0PWgbO_VX1P-S/pub?gid=257223630&single=true&output=csv';
+const WA_MSG = encodeURIComponent("Hi, I found your shop on Pro1Stop.ae! Can I get some info?");
 const ITEMS_PER_PAGE = 12;
 
 let allListings = [], filteredListings = []; let activeFilters = { location: [] }; let dynamicLocations = []; let currentPage = 1;
+
+function renderSkeletons() { let html = ''; for(let i=0; i<8; i++) { html += `<div class="card"><div class="skeleton skel-img"></div><div class="card-body"><div class="skeleton skel-text"></div><div class="skeleton skel-text short"></div><div class="skeleton skel-text"></div></div></div>`; } document.getElementById('listings-container').innerHTML = html; }
+renderSkeletons();
 
 function parseCSV(text) { let p='', row=[''], ret=[row], i=0, r=0, s=true, l; for (l of text) { if ('"'===l) { if (s && l===p) row[i]+=l; s=!s; } else if (','===l && s) l=row[++i]=''; else if ('\n'===l && s) { if ('\r'===p) row[i]=row[i].slice(0,-1); row=ret[++r]=[l='']; i=0; } else row[i]+=l; p=l; } return ret; }
 
@@ -306,13 +299,13 @@ fetch(CSV_URL + '&t=' + Date.now()).then(r => r.text()).then(data => {
     const rows = parseCSV(data); allListings = rows.slice(1).filter(r => r.length > 3 && r[0] && r[0].trim());
     const lSet = new Set(); allListings.forEach(row => { if (row[1] && row[1].trim()) lSet.add(row[1].trim()); }); dynamicLocations = [...lSet].sort();
     buildSidebars(); applyFilters();
-}).catch(() => { document.getElementById('listings-container').innerHTML = '<div class="state"><div class="state-icon">⚠️</div><div class="state-title">Couldn\'t load listings</div></div>'; });
+}).catch(() => { document.getElementById('listings-container').innerHTML = '<div style="text-align:center; grid-column:1/-1; padding:40px;">Error loading directory.</div>'; });
 
 function buildSidebarHTML() {
-    const locHTML = dynamicLocations.map(l => `<label class="filter-label"><input type="checkbox" class="filter-cb" value="${l.toLowerCase()}" onchange="onCheck('location','${l.toLowerCase()}',this.checked)">${l}</label>`).join('');
+    const locHTML = dynamicLocations.map(l => `<label class="filter-label"><input type="checkbox" class="filter-cb" value="${l.toLowerCase()}" ${activeFilters.location.includes(l.toLowerCase())?'checked':''} onchange="onCheck('location','${l.toLowerCase()}',this.checked)">${l}</label>`).join('');
     return `<div class="filter-section"><div class="filter-title">Location</div><div class="filter-scroll">${locHTML}</div></div><button class="clear-btn" onclick="clearFilters()">Clear Filters</button>`;
 }
-function buildSidebars() { const html = buildSidebarHTML(); document.getElementById('sidebar-desktop').innerHTML = html; document.getElementById('sidebar-mobile').innerHTML = html; }
+function buildSidebars() { const h = buildSidebarHTML(); document.getElementById('sidebar-desktop').innerHTML = h; document.getElementById('sidebar-mobile').innerHTML = h; }
 function onCheck(k, v, c) { if (c) { if (!activeFilters[k].includes(v)) activeFilters[k].push(v); } else { activeFilters[k] = activeFilters[k].filter(x => x !== v); } currentPage = 1; buildSidebars(); applyFilters(); }
 function clearFilters() { activeFilters = { location:[] }; document.getElementById('searchInput').value = ''; currentPage = 1; buildSidebars(); applyFilters(); }
 function removePill(k, v) { activeFilters[k] = activeFilters[k].filter(x=>x!==v); currentPage = 1; buildSidebars(); applyFilters(); }
@@ -329,36 +322,42 @@ function applyFilters() {
     renderListings();
 }
 function changePage(page) { currentPage = page; renderListings(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
-function waIconSVG(size) { return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="white"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.665.592 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"/></svg>`; }
+
+function shareCard(shopName) { if (navigator.share) { navigator.share({ title: shopName, text: `Check out ${shopName} on Pro1Stop!`, url: window.location.href }); } else { navigator.clipboard.writeText(`Check out ${shopName} on Pro1Stop! ${window.location.href}`); alert("Link copied to clipboard!"); } }
 
 function renderListings() {
     const c = document.getElementById('listings-container');
-    if (!filteredListings.length) { c.innerHTML = '<div class="state"><div class="state-icon">🔍</div><div class="state-title">No shops found</div></div>'; return; }
+    if (!filteredListings.length) { c.innerHTML = '<div style="text-align:center; grid-column:1/-1; color:var(--text-muted); padding:40px;">No shops match your criteria.</div>'; return; }
     
     const totalPages = Math.ceil(filteredListings.length / ITEMS_PER_PAGE);
     const paginatedData = filteredListings.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
     let html = paginatedData.map((row, idx) => {
-        const shopName=(row[0]||'').trim().replace(/[<>]/g,''), location=(row[1]||'').trim().replace(/[<>]/g,''), mapsLink=(row[2]||'').trim().replace(/[<>"]/g,''), wa1=(row[3]||'').trim().replace(/[^0-9\+]/g,''), wa2=(row[4]||'').trim().replace(/[^0-9\+]/g,'');
+        const shopName=(row[0]||'').trim().replace(/[<>]/g,''), location=(row[1]||'').trim().replace(/[<>]/g,''), mapsLink=(row[2]||'').trim().replace(/[<>"]/g,''), wa1=(row[3]||'').trim().replace(/[^0-9\+]/g,''), wa2=(row[4]||'').trim().replace(/[^0-9\+]/g,''), rating=(row[7]||'').trim();
         let imgUrl=(row[5]||'').trim(); const srcMatch = imgUrl.match(/src=["']([^"']+)["']/i); if(srcMatch) imgUrl=srcMatch[1]; imgUrl=imgUrl.replace(/[<>"]/g,'');
-        const rating=(row[7]||'').trim(); // RATING IS COLUMN 8 (INDEX 7)
 
         let tagsHTML = rating ? `<div class="tags"><span class="tag" style="background: rgba(234,179,8,0.15); color: #facc15; border: 1px solid rgba(234,179,8,0.3);">⭐ ${rating}</span></div>` : '';
         const mediaHTML = imgUrl ? `<div class="card-media"><img src="${imgUrl}" alt="${shopName.replace(/"/g, '&quot;')}" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('show-fallback')"></div>` : `<div class="card-media no-image"></div>`;
-        const mapsRow = mapsLink ? `<div class="meta-row map-link"><svg viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg><a href="${mapsLink}" target="_blank">View on Maps →</a></div>` : '';
+        const mapsRow = mapsLink ? `<div class="meta-row map-link"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg><a href="${mapsLink}" target="_blank">View on Maps →</a></div>` : '';
 
-        let waBtns = '';
-        if(wa1 && wa2) waBtns = `<a href="https://wa.me/${wa1}?text=${WA_MSG}" target="_blank" class="wa-btn half">${waIconSVG(20)}<div>Contact 1</div></a><a href="https://wa.me/${wa2}?text=${WA_MSG}" target="_blank" class="wa-btn half">${waIconSVG(20)}<div>Contact 2</div></a>`;
-        else if(wa1) waBtns = `<a href="https://wa.me/${wa1}?text=${WA_MSG}" target="_blank" class="wa-btn single">${waIconSVG(18)}<div>WhatsApp</div></a>`;
+        let waIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.665.592 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"/></svg>`;
+        let callIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>`;
+        let shareIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>`;
+        
+        let actionBtns = '';
+        if (wa1) {
+            actionBtns += `<a href="tel:${wa1}" class="action-btn call-btn" title="Call">${callIcon}</a>`;
+            actionBtns += `<a href="https://wa.me/${wa1}?text=${WA_MSG}" target="_blank" class="action-btn wa-btn">${waIcon}</a>`;
+            actionBtns += `<button onclick="shareCard('${shopName.replace(/'/g, "\\'")}')" class="action-btn share-btn" title="Share">${shareIcon}</button>`;
+        }
 
-        return `<div class="card" style="animation-delay:${idx*0.05}s">${mediaHTML}<div class="card-body"><div class="card-title">${shopName}</div>${tagsHTML}<div class="meta-row"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>${location}, UAE</div>${mapsRow}</div>${waBtns ? `<div class="btn-group">${waBtns}</div>` : ''}</div>`;
+        return `<div class="card" style="animation-delay:${idx*0.05}s">${mediaHTML}<div class="card-body"><div class="card-title">${shopName}</div>${tagsHTML}<div class="meta-row"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>${location}, UAE</div>${mapsRow}</div>${actionBtns ? `<div class="btn-group">${actionBtns}</div>` : ''}</div>`;
     }).join('');
 
-    if (totalPages > 1) {
-        html += `<div class="pagination"><button class="page-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>← Prev</button><span style="font-size: 13px; color: rgba(255,255,255,0.5); margin: 0 10px;">Page ${currentPage} of ${totalPages}</span><button class="page-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Next →</button></div>`;
-    } c.innerHTML = html;
+    if (totalPages > 1) { html += `<div class="pagination"><button class="page-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>← Prev</button><span style="font-size: 13px; color: var(--text-muted); margin: 0 10px;">Page ${currentPage} of ${totalPages}</span><button class="page-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Next →</button></div>`; } c.innerHTML = html;
 }
 
+let bttBtn = document.getElementById("bttBtn"); window.onscroll = function() { if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) { bttBtn.style.display = "block"; } else { bttBtn.style.display = "none"; } }; bttBtn.onclick = function() { window.scrollTo({ top: 0, behavior: 'smooth' }); };
 document.getElementById('searchInput').addEventListener('input', () => { currentPage = 1; applyFilters(); });
 document.getElementById('openDrawer').addEventListener('click', () => { document.getElementById('drawerOverlay').classList.add('open'); document.body.style.overflow='hidden'; });
 document.getElementById('closeDrawer').addEventListener('click', () => { document.getElementById('drawerOverlay').classList.remove('open'); document.body.style.overflow=''; });
